@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Гера 🤍</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #ffeef8 0%, #f5e6ff 50%, #fff0f5 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Floating hearts container */
+        .hearts-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 20px;
+            color: rgba(255, 105, 180, 0.6);
+            animation: floatUp 3s ease-out forwards;
+            pointer-events: none;
+        }
+
+        @keyframes floatUp {
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-100px) scale(0.5);
+            }
+        }
+
+        .container {
+            max-width: 100%;
+            padding: 20px;
+            margin: 0 auto;
+        }
+
+        /* Welcome Screen */
+        .welcome-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+            animation: fadeIn 1s ease-in;
+        }
+
+        .welcome-screen.hidden {
+            display: none;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .title {
+            font-size: 48px;
+            color: #d63384;
+            margin-bottom: 20px;
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: #8b5a9f;
+            margin-bottom: 40px;
+            line-height: 1.6;
+            max-width: 90%;
+        }
+
+        /* Buttons */
+        .btn {
+            background: linear-gradient(135deg, #ff9ec7 0%, #d8a7e8 100%);
+            border: none;
+            padding: 16px 32px;
+            border-radius: 30px;
+            font-size: 16px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(214, 51, 132, 0.3);
+            font-weight: 500;
+            margin: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(214, 51, 132, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        /* Main Content */
+        .main-content {
+            display: none;
+            padding: 30px 20px;
+            animation: fadeIn 0.8s ease-in;
+        }
+
+        .main-content.visible {
+            display: block;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 25px rgba(214, 51, 132, 0.15);
+            backdrop-filter: blur(10px);
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card-title {
+            font-size: 24px;
+            color: #d63384;
+            margin-bottom: 15px;
+            font-weight: 400;
+        }
+
+        .card-text {
+            font-size: 16px;
+            color: #6c5a7b;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        .compliment-display {
+            min-height: 80px;
+            padding: 20px;
+            background: linear-gradient(135deg, #fff5f9 0%, #f9f0ff 100%);
+            border-radius: 15px;
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 17px;
+            color: #8b5a9f;
+            text-align: center;
+            line-height: 1.6;
+            font-style: italic;
+            border: 2px dashed rgba(214, 51, 132, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .compliment-display.show {
+            animation: pulse 0.5s ease;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.02);
+            }
+        }
+
+        .music-control {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .final-message {
+            display: none;
+            margin-top: 30px;
+        }
+
+        .final-message.visible {
+            display: block;
+            animation: fadeIn 1s ease-in;
+        }
+
+        .final-message .card {
+            background: linear-gradient(135deg, rgba(255, 182, 193, 0.3) 0%, rgba(221, 160, 221, 0.3) 100%);
+            border: 2px solid rgba(214, 51, 132, 0.3);
+        }
+
+        /* Responsive adjustments */
+        @media (min-width: 768px) {
+            .container {
+                max-width: 600px;
+            }
+            
+            .title {
+                font-size: 56px;
+            }
+            
+            .subtitle {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating hearts container -->
+    <div class="hearts-container" id="heartsContainer"></div>
+
+    <div class="container">
+        <!-- Welcome Screen -->
+        <div class="welcome-screen" id="welcomeScreen">
+            <h1 class="title">Гера 🤍</h1>
+            <p class="subtitle">Я знаю, что тебе сейчас нелегко…</p>
+            <button class="btn" id="startBtn">Мне тяжело</button>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content" id="mainContent">
+            <!-- Comforting Message Card -->
+            <div class="card">
+                <h2 class="card-title">Ты не одна 🤗</h2>
+                <p class="card-text" id="comfortMessage">
+                    Я знаю, что сейчас тебе тяжело, но помни: ты сильная, ты справишься. 
+                    Каждый день будет лучше, чем предыдущий. Я верю в тебя.
+                </p>
+            </div>
+
+            <!-- Music Control -->
+            <div class="music-control">
+                <button class="btn" id="musicBtn">Включить музыку 🎵</button>
+                <audio id="backgroundMusic" loop>
+                    <!-- 
+                    TO CHANGE MUSIC FILE:
+                    Replace "music.mp3" with your music file name
+                    Make sure the file is in the same folder as this HTML file
+                    -->
+                    <source src="music.mp3" type="audio/mpeg">
+                    Ваш браузер не поддерживает аудио элемент.
+                </audio>
+            </div>
+
+            <!-- Compliment Section -->
+            <div class="card">
+                <h2 class="card-title">Тёплые слова 💕</h2>
+                <p class="card-text">Нажми на кнопку, и я скажу тебе что-то тёплое:</p>
+                <button class="btn" id="complimentBtn">Скажи мне что-нибудь тёплое</button>
+                <div class="compliment-display" id="complimentDisplay">
+                    Нажми на кнопку выше, чтобы получить тёплое сообщение...
+                </div>
+            </div>
+
+            <!-- Final Message Section -->
+            <div class="final-message" id="finalMessage">
+                <div class="card">
+                    <h2 class="card-title">Я рядом 💖</h2>
+                    <p class="card-text">
+                        Я рядом. Даже когда не могу быть рядом физически, 
+                        мои мысли и поддержка всегда с тобой. 
+                        Ты важна, ты любима, и всё будет хорошо. 
+                        Выздоравливай скорее, моя дорогая Гера. 🤍
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // CONFIGURATION SECTION - EDIT HERE
+        // ============================================
+
+        // Name to use in compliments (can be changed)
+        const GERA_NAME = "Гера";
+
+        // Custom phrases that can be used in compliments
+        const CUSTOM_PHRASES = [
+            "моя дорогая",
+            "моя любимая",
+            "моя прекрасная",
+            "моя сильная"
+        ];
+
+        // Compliment templates - EDIT THESE TO CHANGE COMPLIMENTS
+        // Use {{GERA_NAME}} for the name and {{CUSTOM_PHRASE}} for random phrases
+        const COMPLIMENT_TEMPLATES = [
+            "{{GERA_NAME}}, ты самая сильная и прекрасная девушка, которую я знаю. Ты справишься с этим! 💪",
+            "{{CUSTOM_PHRASE}} {{GERA_NAME}}, даже в самые трудные моменты ты остаёшься удивительной. Я так горжусь тобой! 🌟",
+            "{{GERA_NAME}}, твоя сила вдохновляет. Каждый день ты становишься сильнее, и я вижу это. 💖",
+            "{{CUSTOM_PHRASE}} {{GERA_NAME}}, помни: за каждой тёмной ночью следует яркий рассвет. Всё будет хорошо. 🌅",
+            "{{GERA_NAME}}, ты невероятно храбрая. Даже когда тебе тяжело, ты продолжаешь бороться. Это восхищает. ✨",
+            "{{CUSTOM_PHRASE}} {{GERA_NAME}}, твоё сердце полно любви и света. Это поможет тебе пройти через всё. 💕",
+            "{{GERA_NAME}}, я верю в тебя больше, чем ты можешь представить. Ты справишься, я знаю это. 🌸",
+            "{{CUSTOM_PHRASE}} {{GERA_NAME}}, каждый твой вдох - это шаг к выздоровлению. Ты на правильном пути. 🌺",
+            "{{GERA_NAME}}, твоя улыбка - это солнце, которое светит даже в пасмурные дни. Она вернётся. ☀️",
+            "{{CUSTOM_PHRASE}} {{GERA_NAME}}, ты окружена любовью и заботой. Мы все здесь, чтобы поддержать тебя. 🤗",
+            "{{GERA_NAME}}, болезнь - это временно, но твоя сила и красота - навсегда. 💐",
+            "{{CUSTOM_PHRASE}} {{GERA_NAME}}, каждый день ты становишься здоровее. Скоро всё вернётся на свои места. 🌷",
+            "{{GERA_NAME}}, твоё тело знает, как исцелиться. Дай ему время, и оно справится. Ты справишься. 💪",
+            "{{CUSTOM_PHRASE}} {{GERA_NAME}}, я думаю о тебе каждый день и посылаю тебе всю свою любовь и энергию. 💝",
+            "{{GERA_NAME}}, ты заслуживаешь всего самого лучшего. Скоро ты почувствуешь себя лучше, я уверена. 🌈"
+        ];
+
+        // ============================================
+        // END OF CONFIGURATION
+        // ============================================
+
+        // DOM Elements
+        const welcomeScreen = document.getElementById('welcomeScreen');
+        const mainContent = document.getElementById('mainContent');
+        const startBtn = document.getElementById('startBtn');
+        const musicBtn = document.getElementById('musicBtn');
+        const backgroundMusic = document.getElementById('backgroundMusic');
+        const complimentBtn = document.getElementById('complimentBtn');
+        const complimentDisplay = document.getElementById('complimentDisplay');
+        const finalMessage = document.getElementById('finalMessage');
+        const heartsContainer = document.getElementById('heartsContainer');
+
+        // Initialize
+        let complimentClickCount = 0;
+        let musicPlaying = false;
+
+        // Start button click handler
+        startBtn.addEventListener('click', function() {
+            welcomeScreen.classList.add('hidden');
+            setTimeout(() => {
+                mainContent.classList.add('visible');
+                createHearts(5);
+            }, 300);
+        });
+
+        // Music button click handler
+        musicBtn.addEventListener('click', function() {
+            if (!musicPlaying) {
+                backgroundMusic.play().then(() => {
+                    musicPlaying = true;
+                    musicBtn.textContent = 'Выключить музыку 🎵';
+                    createHearts(3);
+                }).catch(error => {
+                    console.log('Music playback failed:', error);
+                    alert('Не удалось воспроизвести музыку. Убедитесь, что файл music.mp3 находится в той же папке, что и этот HTML файл.');
+                });
+            } else {
+                backgroundMusic.pause();
+                musicPlaying = false;
+                musicBtn.textContent = 'Включить музыку 🎵';
+            }
+        });
+
+        // Compliment button click handler
+        complimentBtn.addEventListener('click', function() {
+            const compliment = getRandomCompliment();
+            complimentDisplay.textContent = compliment;
+            complimentDisplay.classList.add('show');
+            createHearts(8);
+            
+            // Show final message after 3 compliments
+            complimentClickCount++;
+            if (complimentClickCount >= 3 && !finalMessage.classList.contains('visible')) {
+                setTimeout(() => {
+                    finalMessage.classList.add('visible');
+                    createHearts(10);
+                }, 1000);
+            }
+            
+            // Remove show class after animation
+            setTimeout(() => {
+                complimentDisplay.classList.remove('show');
+            }, 500);
+        });
+
+        // Get random compliment with template replacement
+        function getRandomCompliment() {
+            const template = COMPLIMENT_TEMPLATES[Math.floor(Math.random() * COMPLIMENT_TEMPLATES.length)];
+            let compliment = template;
+            
+            // Replace {{GERA_NAME}}
+            compliment = compliment.replace(/\{\{GERA_NAME\}\}/g, GERA_NAME);
+            
+            // Replace {{CUSTOM_PHRASE}}
+            if (compliment.includes('{{CUSTOM_PHRASE}}')) {
+                const randomPhrase = CUSTOM_PHRASES[Math.floor(Math.random() * CUSTOM_PHRASES.length)];
+                compliment = compliment.replace(/\{\{CUSTOM_PHRASE\}\}/g, randomPhrase);
+            }
+            
+            return compliment;
+        }
+
+        // Create floating hearts animation
+        function createHearts(count) {
+            for (let i = 0; i < count; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'heart';
+                    heart.textContent = '💖';
+                    
+                    // Random horizontal position
+                    const left = Math.random() * 100;
+                    heart.style.left = left + '%';
+                    
+                    // Start from bottom
+                    heart.style.bottom = '-20px';
+                    
+                    heartsContainer.appendChild(heart);
+                    
+                    // Remove heart after animation
+                    setTimeout(() => {
+                        heart.remove();
+                    }, 3000);
+                }, i * 100);
+            }
+        }
+
+        // Add gentle touch feedback
+        document.querySelectorAll('.btn').forEach(btn => {
+            btn.addEventListener('touchstart', function() {
+                this.style.transform = 'scale(0.95)';
+            });
+            
+            btn.addEventListener('touchend', function() {
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 150);
+            });
+        });
+    </script>
+</body>
+</html>
